@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://openleadr.org:8911/gui/index.html -->
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>OpenLEADR Demo VTN (Servidor)</title>
+    <style>
+        html{
+            padding: 20px;
+            border-top: 5px solid #785b9c;
+            border-bottom: 5px solid #785b9c;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        body{
+            font-family: sans-serif;
+            font-size:10pt;
+            margin: 0px auto;
+            width: 1200px;
+            line-height: 1.5em;
+        }
+
+        label{
+            display: inline-block;
+            width: 100px;
+            text-align: right;
+        }
+
+        label, input{
+            margin-bottom: 3px;
+        }
+
+        fieldset{
+            border: 1px solid black;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        fieldset legend{
+            font-weight: bold;
+            font-size: 11pt;
+            text-transform: uppercase;
+            background-color: #785b9c;
+            width: 100%;
+            padding: 0px 10px;
+            margin: 5px -11px 10px;
+            border: 1px solid black;
+            color: white;
+        }
+
+        fieldset.main-config{
+            flex: 1;
+            display: inline-block;
+            width: 400px;
+        }
+
+        fieldset.inner-field-set{
+            flex: 1;
+        }
+
+        select{
+            width: 100%;
+        }
+
+        h1{
+            text-align: center;
+        }
+
+        div.flex{
+            display: flex;
+        }
+
+        div.flex-item{
+            flex: 1 1 20px;
+        }
+
+        table{
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        td{
+            border: 1px solid #ccc;
+            padding: 0px 3px;
+        }
+
+        thead td{
+            font-weight: bold;
+        }
+
+        div#clock{
+            text-align: right;
+        }
+
+        hr{
+            border-left: none;
+            border-top: none;
+            border-bottom: none;
+            border-top: 1px solid #ccc;
+            height: 0px;
+            width: 100%;
+        }
+
+        td{
+            vertical-align: top;
+        }
+
+        td pre{
+            max-width: 600px;
+            overflow-x:scroll;
+            font-size: 0.8em;
+            padding: 0;
+            margin: 0;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>OpenADR Virtual Top Node</h1>
+    <p style="text-align:center; font-style: italic"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Construído com </font></font><a href="https://openleadr.org/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">OpenLEADR</font></font></a></p>
+    <p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Este é um aplicativo de demonstração simples que usa OpenLEADR para Python. </font><font style="vertical-align: inherit;">Não se destina a ser usado em qualquer tipo de ambiente de produção. </font><font style="vertical-align: inherit;">Se você deseja integrar as comunicações OpenADR em seus próprios projetos ou aplicativos, dê uma olhada no projeto OpenLEADR. </font><font style="vertical-align: inherit;">Obrigado.</font></font></p>
+    <p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Passe o mouse sobre os campos de entrada e botões para obter breves explicações sobre o que eles fazem.</font></font></p>
+    <div id="clock"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Horário UTC: </font></font><span id="utctime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">17:11:55</font></font></span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> Z</font></font></div>
+    <div class="flex">
+    <fieldset class="main-config" style="flex: 1">
+        <legend><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Configurações VTN</font></font></legend>
+        <label for="vtnid"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">VTN ID</font></font></label>
+        <input id="vtnid" value="demovtn" title="O ID VTN para o seu VTN (você pode fazer isso sozinho)"><br>
+
+        <label for="http_port"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Porta HTTP</font></font></label>
+        <input disabled="" name="http_port" id="http_port" value="8080" title="A porta HTTP para escutar (padrão 8080)"><br>
+
+        <!--<label for="http_host">HTTP Host</label>
+        <input name="http_host" id="http_host" value="127.0.0.1" title="The IP address to bind to (default 127.0.0.1, use 0.0.0.0 to connect from outside your machine)"><br>
+
+        <label for="cert">cert</label>
+        <input type="file" name="cert" id="cert" value="" title="File containing a PEM-formatted X509 certificate"><br>
+
+        <label for="key">key</label>
+        <input type="file" name="key" id="key" value="" title="File containing a PEM-formatted X509 private key"><br>
+
+        <label for="passphrase">passphrase</label>
+        <input name="passphrase" id="passphrase" value="" title="Optional passphrase used to encrypt the private key"><br>
+
+        <label for="ca_cert">ca_cert</label>
+        <input type="file" name="ca_cert" id="ca_cert" value="" title="File containing a PEM-formatted X509 CA File used to verify VEN certificates."><br>
+
+        <label for="ca_key">ca_key</label>
+        <input type="file" name="ca_key" id="ca_key" value="" title="File containing a PEM-formatted X509 CA Private Key to sign new VEN certificates"><br>
+
+        <label for="poll_frequency">poll_frequency</label>
+        <input name="poll_frequency" id="poll_frequency" value="10" title="How frequent the VEN should poll for new messages (seconds)"><br>
+        <label></label>-->
+        <label></label><button id="btn-start-server" onclick="startServer()" disabled=""><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Iniciar servidor</font></font></button>
+        <button id="btn-stop-server" onclick="stopServer()"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Parar servidor</font></font></button>
+	<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Você pode conectar seu VEN a </font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">http://openleadr.org:8080/OpenADR2/Simple/2.0b</font></font></p>
+    </fieldset>
+
+   <fieldset style="flex: 1 1">
+        <legend><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Inscreva-se no novo VEN</font></font></legend>
+        <p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Ainda não disponível nesta GUI. </font><font style="vertical-align: inherit;">Será solicitado que você se inscreva no VEN quando seu VEN se conectar.</font></font></p>
+        <!--
+        <label for="ven_name">VEN Name</label>
+        <input id="ven_id" name="ven_id"><br>
+
+        <label for="ven_id">VEN ID</label>
+        <input id="ven_id" name="ven_id"><br>
+        <hr>
+        Authentication:<br>
+        <label for="fingerprint">Fingerprint</label>
+        <input id="enroll-ven-fingerprint" name="fingerprint" title="If you already have a valid X509 keypair, enter its fingerprint here." onkeyup="enrollVenFingerprintEdit()" onchange="enrollVenFingerprintEdit()"><br>
+
+        <label></label>&ndash; or &ndash; <br>
+        <label for="csr">CSR</label>
+        <input id="btn-upload-ven-csr" type="file" name="csr" id="csr" title="If you have a Certificate Signing Request from the VEN, upload it here">
+        <label></label>&ndash; or &ndash; <br>
+
+        <label></label><button id="btn-generate-certificates" title="Click here to generate a public/private keypair that the VEN should use">Generate certificates</button><br>
+        <hr>
+        <label></label><button id="btn-enroll-ven" onclick="enrollVenSubmit">Enroll new VEN</button>-->
+    </fieldset>
+    <fieldset class="main-config" style="flex: 1">
+        <legend>Configured VENs</legend>
+        <select id="ven-selector" name="vens" size="4" onchange="changeVENSelection()"></select>
+        <div style="text-align: right"><button onclick="removeVEN()"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Remover selecionado</font></font></button></div>
+    </fieldset>
+
+    </div><br>
+
+    <fieldset>
+        <legend><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Informação VEN selecionada</font></font></legend>
+        <div class="flex">
+        <fieldset class="inner-field-set">
+            <legend><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Em geral</font></font></legend>
+            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nome Ven</font></font></label>
+            <input id="selected-ven-name" disabled="" value=""><br>
+
+            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Ven ID</font></font></label>
+            <input id="selected-ven-id" disabled="" value=""><br>
+
+            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Impressão digital</font></font></label>
+            <input id="selected-ven-fingerprint" disabled="" value=""><br>
+
+            <!--<button onclick="requestReregistration()">Request Reregistration</button>-->
+        </fieldset>
+
+        <fieldset class="inner-field-set">
+            <legend><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Relatórios</font></font></legend>
+            <p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Ainda não disponível nesta GUI</font></font></p>
+        </fieldset>
+        <fieldset class="inner-field-set">
+            <legend><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Eventos</font></font></legend>
+            <table>
+                <thead>
+                    <tr>
+                        <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Sinal</font></font></td>
+                        <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Começar</font></font></td>
+                        <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Status</font></font></td>
+                    </tr>
+                </thead>
+                <tbody id="ven-events">
+                </tbody>
+            </table>
+            <hr>
+            <p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adicionar evento para este VEN</font></font></strong></p>
+            <input id="radio-signal-name-simple" type="radio" name="signal-type" value="simple"><label for="radio-signal-name-simple" style="text-align:left; display:inline; padding: 0px 0px 2px 2px; vertical-align:top;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">simples: nível</font></font></label><br>
+
+            <input id="radio-signal-name-load-control-capacity" type="radio" name="signal-type" value="x-loadControlCapacity"><label for="radio-signal-name-load-control-capacity" style="text-align:left; display:inline; padding: 0px 0px 2px 2px; vertical-align:top;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">LOAD_CONTROL: x-loadControlCapacity</font></font></label><br>
+            <button onclick="createVENEvent()"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Gerar Evento</font></font></button>
+        </fieldset>
+        </div>
+    </fieldset><br>
+
+    <fieldset>
+        <legend><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Comunicações VEN selecionadas</font></font></legend>
+        <table>
+            <thead>
+                <tr>
+                    <td width="200px"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tempo</font></font></td>
+                    <td width="50px"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Direção</font></font></td>
+                    <td width="200px"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tipo de mensagem</font></font></td>
+                    <td width="600px"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Carga útil da mensagem</font></font></td>
+                </tr>
+            </thead>
+            <tbody id="ven-messages">
+            </tbody>
+        </table>
+    </fieldset>
+
+<script type="text/javascript">
+
+    SELECTED_VEN_ID = '';
+
+    let ws = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/ws")
+
+    ws.onopen = function(){
+        console.log("Websocket opened")
+    }
+
+    ws.onmessage = function(message){
+        console.log("Got message");
+        console.log(message);
+        msg = JSON.parse(message.data);
+        if (msg.action == 'register_ven'){
+            askVenRegistration(msg.msg_id, msg.data.ven_name);
+        }
+        if (msg.action == 'register_report'){
+            askReportPicks(msg.msg_id, msg.data);
+        }
+        if (msg.action == "started_server"){
+            startedServer();
+        }
+        if (msg.action == "stopped_server"){
+            stoppedServer();
+        }
+        if (msg.action == "ven_info"){
+            updateVENInfo(msg.data);
+        }
+        if (msg.action == 'ven_messages'){
+            setVENMessages(msg.data);
+        }
+        if (msg.action == 'ven_message'){
+            if(msg.data.ven_id == SELECTED_VEN_ID){
+                addVENMessage(msg.data);
+            } else {
+                console.log("Got message for unselected VEN, ignoring");
+            }
+        }
+
+        if (msg.action == 'add_vens'){
+            addVENs(msg.data);
+        }
+        if (msg.action == 'add_events'){
+            if (msg.data.ven_id == SELECTED_VEN_ID){
+                addEvents(msg.data);
+            }
+        }
+        if (msg.action == 'conflicting_vens'){
+            alert("You are trying to register conflicting ven_name and ven_ids. Please remove the existing VENs before proceeding.")
+        }
+        if (msg.action == 'event_added'){
+            if (msg.data.ven_id == SELECTED_VEN_ID){
+                addEvent(msg.data);
+            }
+        }
+        if (msg.action == 'event_opted'){
+            if (msg.data.ven_id == SELECTED_VEN_ID){
+                updateEvent(msg.data);
+            }
+        }
+    }
+
+    ws.onclose = function(){
+        console.log("Websocket closed")
+        alert("The connection to the GUI is broken. Reload the page to re-connect!")
+    }
+
+    ws.onerror = function(){
+    	console.log("Websocket error")
+    	alert("The connection to the GUI is broken. Reload the page to re-connect!")
+    }
+
+    function addEvents(data){
+        var el = document.getElementById('ven-events');
+        el.innerHTML = '';
+        for (let i = 0; i < data.events.length; i++){
+            addEvent(data.events[i]);
+        }
+    }
+
+    function updateEvent(data){
+        var el = document.getElementById('event-' + data.event_id)
+        el.textContent = data.opt_type;
+    }
+
+    function addEvent(data){
+        var el = document.getElementById('ven-events');
+        var event_el = document.createElement('tr')
+        var signal_el = document.createElement('td')
+        signal_el.textContent = data.signal_type;
+        event_el.appendChild(signal_el);
+
+        var start_el = document.createElement('td');
+        start_el.textContent = data.event_start;
+        event_el.appendChild(start_el);
+
+        var status_el = document.createElement('td');
+        status_el.textContent = data.opt_type;
+        status_el.id = 'event-' + data.event_id;
+        event_el.appendChild(status_el);
+        el.insertBefore(event_el, el.firstChild);
+    }
+
+    function startServer(event){
+        console.log("Submitting settings");
+        msg = {action: 'start',
+               config: {vtn_id: document.getElementById('vtnid').value,
+                        http_port: document.getElementById('http_port').value
+                    }};
+        console.log(msg);
+        console.log(JSON.stringify(msg));
+        ws.send(JSON.stringify(msg))
+    }
+
+    function stopServer(event){
+        msg = {action: 'stop'};
+        ws.send(JSON.stringify(msg));
+    }
+
+    function startedServer(){
+        document.getElementById("btn-start-server").disabled = true;
+        document.getElementById("btn-stop-server").disabled = false;
+    }
+
+    function stoppedServer(){
+        document.getElementById("btn-start-server").disabled = false;
+        document.getElementById("btn-stop-server").disabled = true;
+    }
+
+    function removeVEN(){
+        console.log("REMOVE VEN");
+        msg = {action: 'remove_ven',
+               data: {ven_id: SELECTED_VEN_ID}};
+        ws.send(JSON.stringify(msg));
+    }
+
+    /* GUI updates */
+
+    function changeVENSelection(){
+        console.log("changedVENSelection");
+        SELECTED_VEN_ID = document.getElementById("ven-selector").selectedOptions[0].value;
+        msg = {'action': 'select_ven',
+               'data': {'ven_id': SELECTED_VEN_ID}};
+        ws.send(JSON.stringify(msg));
+    }
+
+    function addVENs(data){
+        el = document.getElementById('ven-selector')
+        el.innerHTML = '';
+        for (let i = 0; i < data.length; i++){
+            option_el = document.createElement('option');
+            option_el.setAttribute('value', data[i].ven_id);
+            option_el.textContent = data[i].ven_name;
+            el.appendChild(option_el)
+        }
+    }
+
+    function updateVENInfo(data){
+        console.log("updateVENInfo");
+        console.log(data);
+        document.getElementById("selected-ven-name").value = data.ven_name;
+        document.getElementById("selected-ven-id").value = data.ven_id;
+        document.getElementById("selected-ven-fingerprint").value = data.fingerprint;
+    }
+
+    function setVENMessages(data){
+        // Clear all messages
+        var el = document.getElementById('ven-messages')
+        el.innerHTML = '';
+
+        // Add message elements
+        for (let i = 0; i < data.length; i++){
+            addVENMessage(data[i]);
+        }
+    }
+
+    function addVENMessage(data){
+        el = document.getElementById('ven-messages');
+        var msg_el = document.createElement('tr');
+        var time_el = document.createElement('td');
+        time_el.textContent = data.time;
+        msg_el.appendChild(time_el);
+
+        var dir_el = document.createElement('td');
+        dir_el.textContent = data.direction;
+        msg_el.appendChild(dir_el);
+
+        var message_type_el = document.createElement('td');
+        message_type_el.textContent = data.message_type
+        msg_el.appendChild(message_type_el);
+
+        var message_payload_el = document.createElement('td');
+        var pre_el = document.createElement('pre');
+        pre_el.textContent = data.message_payload;
+        message_payload_el.appendChild(pre_el);
+        msg_el.appendChild(message_payload_el);
+
+        el.insertBefore(msg_el, el.firstChild);
+    }
+
+    function enrollVenFingerprintEdit(){
+        if (document.getElementById("enroll-ven-fingerprint").value.length > 0){
+            document.getElementById("btn-upload-ven-csr").disabled = true;
+            document.getElementById("btn-generate-certificates").disabled = true;
+        } else {
+            document.getElementById("btn-upload-ven-csr").disabled = false;
+            document.getElementById("btn-generate-certificates").disabled = false;
+        }
+    }
+
+    function enrollNewVen(){
+
+        if(file.files.length)
+        {
+            var reader = new FileReader();
+            reader.onload = function(e)
+            {
+                document.getElementById('outputDiv').innerHTML = e.target.result;
+            };
+            reader.readAsBinaryString(file.files[0]);
+        }
+    }
+
+    function requestReregistration(){
+        ven_id = document.getElementById("selectedVenID").value;
+        msg = {action: 'request_reregistration',
+               data: {ven_id: ven_id}};
+        ws.send(JSON.stringify(msg));
+    }
+
+    function requestReport(){
+        ven_id = document.getElementById('selectedVenID').value;
+    }
+
+    function createVENEvent(event){
+        console.log("CREATE EVENT");
+        signal = document.querySelector('input[name="signal-type"]:checked').value;
+        if (signal == 'simple'){
+            var signal_name = 'SIMPLE';
+            var signal_type = 'level';
+        }
+        if (signal == 'x-loadControlCapacity'){
+            var signal_name = 'LOAD_CONTROL';
+            var signal_type = 'x-loadControlCapacity';
+        }
+        msg = {action: 'create_event',
+               data: {ven_id: SELECTED_VEN_ID,
+                      signal_name: signal_name,
+                      signal_type: signal_type}};
+        ws.send(JSON.stringify(msg));
+    }
+    /* Event alerts */
+
+    function askVenRegistration(msg_id, ven_name){
+        console.log(msg_id);
+        console.log(ven_name);
+        if (confirm("Do you want to allow the VEN with name '" + ven_name + "' to register?")){
+            msg = {action: 'reply',
+                   msg_id: msg_id,
+                   data: 'yes'};
+            ws.send(JSON.stringify(msg));
+        } else {
+            msg = {action: 'reply',
+                   msg_id: msg_id,
+                   data: 'no'};
+            ws.send(JSON.stringify(msg));
+        }
+    }
+
+    function askReportPicks(msg_id, report){
+        if (report.scale == "none"){
+            report.scale = "";
+        }
+        if (confirm("Do you wish to receive a report for resource '" + report.resource_id + "' on measurement '" + report.measurement + "' with measured in '" + report.scale + report.unit + "' at sampling interval " + report.min_sampling_rate + " seconds?")){
+            msg = {action: 'reply',
+                   msg_id: msg_id,
+                   data: true};
+        } else {
+            msg = {action: 'reply',
+                   msg_id: msg_id,
+                   data: false};
+        }
+        ws.send(JSON.stringify(msg));
+    }
+
+    function showDialog(msg_id, question){
+
+    }
+
+    clockElement = document.getElementById('utctime');
+    updateClock();
+    setInterval(updateClock, 200);
+    function updateClock(element){
+        clockElement.textContent = new Date().toISOString().slice(11,19);
+    }
+
+    function updateLastSeen(ven_id){
+        //document.getElementById('venid-' + ven_id).value =
+    }
+</script>
+
+</body></html>
